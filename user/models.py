@@ -65,4 +65,12 @@ class User(AbstractBaseUser):
     def is_staff(self): 
         return self.is_admin
 
+# user profile
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, verbose_name="유저", on_delete=models.CASCADE, primary_key=True)
+    introduction = models.TextField("자기소개")
+    birthday = models.DateField("생일")
+    age = models.IntegerField("나이")
 
+    def __str__(self):
+        return f"{self.user.username} 님의 프로필"
