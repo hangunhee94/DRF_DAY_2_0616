@@ -17,3 +17,11 @@ class Article(models.Model):
     content = models.TextField("내용")
     def __str__(self):
         return f'{self.title} {self.user.username}님이 작성하신 글입니다.'
+
+class Comment(models.Model):
+    article = models.ForeignKey('blog.Article',verbose_name="게시글",on_delete=models.CASCADE, max_length=30)
+    user = models.ForeignKey('user.User',verbose_name="작성자",on_delete=models.CASCADE, max_length=30)
+    content = models.TextField("내용", max_length=300)
+
+    def __str__(self):
+        return f'{self.content} {self.user.username}님이 작성하신 댓글입니다.'
