@@ -7,12 +7,31 @@ from blog.models import Comment as CommentModel
 from user.models import User as UserModel
 from user.models import UserProfile as UserProfileModel
 
-class ArticleSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = ArticleModel
-        fields = "__all__"
+        model = CategoryModel
+        fields =["name"]
+
 
 class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    
+    def get_user(self, obj):
+        return obj.user.username
+    
     class Meta:
         model = CommentModel
-        fields = "__all__"
+        fields = ["user", "contents"]
+
+class ArticleSerializer(serializers.ModelSerializer):
+    category =serializers.SerializerMethodField()
+    comments = CommentSerializer(many=True, source="comments_set")
+    
+    def get_category(self, obj):
+        return [category.name for category in obj.category.all()]
+    
+    class Meta:
+        model = ArticleModel
+        fields = ["category", "title", "contents", "comments"]
+

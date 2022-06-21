@@ -5,10 +5,13 @@ from rest_framework.response import Response
 
 from django.contrib.auth import login, logout, authenticate
 
+from DRF_DAY2.permissions import IsAdminOrIsAuthenticatedReadOnly
+
 from user.serializers import UserProfileSerializer, UserSerializer, UserSignupSerializer
 
 class UserView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminOrIsAuthenticatedReadOnly]
+    # permission_classes = [permissions.IsAuthenticated]
 
     # 사용자 정보 조회
     def get(self, request):
